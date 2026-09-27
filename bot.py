@@ -1,15 +1,16 @@
 import os
 import asyncio
 import threading
-from pyrogram import Client, filters, idle
 
-# ----- Python 3.14 + Pyrogram compatibility patch -----
+# ----- Python 3.14 + Pyrogram patch (import-க்கு முன்பே வேண்டும்) -----
 try:
     asyncio.get_event_loop()
 except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-# ------------------------------------------------------
+# --------------------------------------------------------------------
+
+from pyrogram import Client, filters, idle
 
 API_ID = int(os.environ.get("API_ID", 0))
 API_HASH = os.environ.get("API_HASH", "")
