@@ -1,6 +1,6 @@
 import os
 import asyncio
-from pyrogram import Client, filters
+from pyrogram import Client, filters, idle
 
 # கோயப் / ரெண்டர்ல இருந்து Environment Variables-ஆ எடுக்கப் போறோம்
 API_ID = int(os.environ.get("API_ID", 0))
@@ -31,7 +31,7 @@ async def main():
     print("Bot is starting...")
     await app.start()
     print("Bot is running successfully!")
-    await asyncio.Event().wait()
+    await idle()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    app.run()
