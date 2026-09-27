@@ -1,7 +1,8 @@
 import os
+import asyncio
 from pyrogram import Client, filters
 
-# கோயப்ல இருந்து Environment Variables-ஆ எடுக்கப் போறோம்
+# கோயப் / ரெண்டர்ல இருந்து Environment Variables-ஆ எடுக்கப் போறோம்
 API_ID = int(os.environ.get("API_ID", 0))
 API_HASH = os.environ.get("API_HASH", "")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
@@ -23,9 +24,14 @@ async def handle_terabox(client, message):
     text = message.text
     if "terabox" in text.lower():
         await message.reply_text("📥 உன்னோட Terabox லிங்க் கிடைச்சிருச்சு! வீடியோவை ப்ராசஸ் பண்ணிட்டு இருக்கேன்...")
-        # இங்கே Terabox API அல்லது scraping கோட ஆட் பண்ணனும்
     else:
         await message.reply_text("தயவுசெய்து ஒரு சரியான Terabox லிங்க்காக அனுப்புங்க நண்பா!")
 
-print("Bot is running...")
-app.run()
+async def main():
+    print("Bot is starting...")
+    await app.start()
+    print("Bot is running successfully!")
+    await asyncio.Event().wait()
+
+if __name__ == "__main__":
+    asyncio.run(main())
