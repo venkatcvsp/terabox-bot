@@ -2,41 +2,29 @@ import os
 import asyncio
 from pyrogram import Client, filters, idle
 
-# ─── API_ID-ஐ 32-bit வரம்பிற்குள் கொண்டு வரும் helper ───
-def safe_api_id(raw_value, max_int32=2147483647):
-    """10 இலக்க API_ID-ஐ 32-bit signed int ஆக மாற்று."""
-    try:
-        value = int(raw_value)
-    except (ValueError, TypeError):
-        raise ValueError(f"API_ID ஒரு எண்ணாக இருக்க வேண்டும்: {raw_value!r}")
-
-    if value < 0 or value > max_int32:
-        original = value
-        value = value % (max_int32 + 1)
-        print(f"⚠️ API_ID {original} → {value} (32-bit வரம்பிற்குள்)")
-
-    return value
-
-
-API_ID = safe_api_id(os.environ.get("API_ID", 0))
+# ─── சூழல் மாறிகளிலிருந்து மதிப்புகளைப் பெறுதல் ───
+API_ID = int(os.environ.get("API_ID", 0))
 API_HASH = os.environ.get("API_HASH", "")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 
-print("=" * 50)
-print(f"API_ID   = {API_ID}")
-print(f"API_HASH = {API_HASH!r}")
-print(f"BOT_TOKEN= {BOT_TOKEN[:20]!r}...")
-print("=" * 50)
-
 # ─── சரிபார்ப்பு ───
-if API_ID <= 0:
-    raise ValueError(f"API_ID தவறானது: {API_ID}")
+if not (0 < API_ID <= 2147483647):
+    raise ValueError(
+        f"API_ID தவறானது: {API_ID}. "
+        "my.telegram.org-இலிருந்து சரியான 7-8 இலக்க எண்ணைப் பெறவும்."
+    )
 if not API_HASH or len(API_HASH) != 32:
     raise ValueError(f"API_HASH தவறானது: {API_HASH!r}")
 if not BOT_TOKEN or ":" not in BOT_TOKEN:
     raise ValueError(f"BOT_TOKEN தவறானது: {BOT_TOKEN[:20]!r}...")
 
+print("=" * 50)
+print(f"API_ID   = {API_ID}")
+print(f"API_HASH = {API_HASH[:8]}...")
+print(f"BOT_TOKEN= {BOT_TOKEN[:20]}...")
+print("=" * 50)
 
+# ─── Pyrogram Client ───
 app = Client(
     "terabox_bot",
     api_id=API_ID,
